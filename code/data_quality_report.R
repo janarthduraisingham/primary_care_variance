@@ -1,5 +1,5 @@
-# Purpose: This script outputs:
-# 1.) a csv report summarising the missingness and extremes in the task dataset
+# Purpose: This script creates an output folder and outputs:
+# 1.) a csv data quality summary of the missingness and extremes in the task dataset
 # 2.) frequency histograms for each variable
 
 # Import libraries
@@ -14,8 +14,17 @@ raw_data <- read.csv("data/task_dataset.csv")
 missings <- sapply(raw_data, function(x) sum(is.na(x)))
 missings <- round(missings / nrow(raw_data), 3) # Convert absolute to proportion to 3dp
 
+# Get minimum and maximum value from each column
+mins <- sapply(raw_data, function(x) min(x, na.rm=TRUE))
+maxs <- sapply(raw_data, function(x) max(x, na.rm=TRUE))
+
+# join missings, mins, maxs
+summary <- data.frame(missings,
+                      mins,
+                      maxs)
+
 # Sort by descending proportion missing
-missings <- data.frame(missings) %>%
+summary <- data.frame(summary) %>%
   arrange(desc(missings))
 
 # Save to csv
@@ -25,8 +34,9 @@ if (!(dir.exists("output"))) {
   dir.create("output")
   
 }
-colnames(missings) <- c("proportion_missing")
-write.csv(missings, "output/missingness_report.csv")
+
+colnames(summary) <- c("proportion_missing", "min_of_column", "max_of_column")
+write.csv(missings, "output/data_quality_summary.csv")
 
 ### Variable frequency plots
 
@@ -40,7 +50,7 @@ discrete_vars <- setdiff(discrete_vars, c("gp_code",
                                           "icb_name",
                                           "postcode"))
 
-# Define function to plot histogram of continuous variable counts
+# Define function to plot histogram of continuous variable frequencies
 plot_frequency_histogram_continuous <- function(colname) {
   
   plot <- ggplot(raw_data, aes(x=!!sym(colname))) +
@@ -54,7 +64,7 @@ plot_frequency_histogram_continuous <- function(colname) {
   
 }
 
-# Define function to plot bar chart of discrete variable counts
+# Define function to plot bar chart of discrete variable frequencies
 plot_frequency_histogram_discrete <- function(colname) {
   
   plot <- ggplot(raw_data, aes(x=!!sym(colname))) +
@@ -76,5 +86,6 @@ if (!(dir.exists("output/frequency_plots"))) {
   
 }
 
+# Generate plots
 walk(continuous_vars, plot_frequency_histogram_continuous)
 walk(discrete_vars, plot_frequency_histogram_discrete)
