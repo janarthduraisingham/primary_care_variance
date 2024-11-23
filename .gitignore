@@ -57,8 +57,8 @@ rsconnect/
 .quarto
 
 # Exclude the following directories 
-/data/
-/output/
+data/
+output/
 
 # Exclude data file types
 *.doc
