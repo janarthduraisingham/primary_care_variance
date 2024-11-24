@@ -9,7 +9,7 @@ library(tidyverse)
 raw_data <- read_csv("data/task_dataset.csv")
 
 # Set QUANTILE variable for threshold
-QUANTILE <- 0.9
+QUANTILE <- 0.8
 
 # Create directory for plots
 if (!(dir.exists("output"))) {
@@ -107,4 +107,6 @@ gps_to_support <- Reduce(intersect, list(high_dna$gp_code,
                        low_needsmet$gp_code,
                        low_overallexp$gp_code))
 
-write.csv(gps_to_support, "gps_to_support_gp_codes")
+write.table(gps_to_support, "output/patient_engagement/gps_to_support_gp_codes.csv",
+            col.names = FALSE,
+            row.names=FALSE)
