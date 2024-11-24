@@ -12,9 +12,9 @@ library(rmarkdown)
 raw_data <- read.csv("data/task_dataset.csv") # task dataset
 
 postcode_lookup <- read_csv("data/PCD_OA21_LSOA21_MSOA21_LAD_AUG24_UK_LU.csv") # postcode to ONS geography lookup
-population_lookup <- read_excel("data/sapemsoaquinaryagetablefinal.xlsx", sheet = "Mid-2022 MSOA 2021", skip=3) # MSOA population lookup
+population_lookup <- read_excel("data/sapemsoaquinaryagetablefinal.xlsx", sheet = "Mid-2022 MSOA 2021", skip=3) # MSOA level population lookup
 ward_lookup <- read_csv("data/Middle_Layer_Super_Output_Area_(2021)_to_Ward_to_LAD_(May_2023)_Lookup_in_England_and_Wales.csv") # MSOA to Ward lookup
-icb_population_lookup <- read_excel("data/sapehealthgeogstablefinal.xlsx", sheet = "Mid-2021 ICB 2023", skip = 3) # ICB population lookup
+icb_population_lookup <- read_excel("data/sapehealthgeogstablefinal.xlsx", sheet = "Mid-2021 ICB 2023", skip = 3) # ICB level population lookup
 
 msoa_polygons <- st_read("data/Middle_layer_Super_Output_Areas_December_2021_Boundaries_EW_BFC_V7_303696399389513507.geojson") # MSOA boundaries
 lad_polygons <- st_read("data/Local_Authority_Districts_May_2024_Boundaries_UK_BFC_-6788913184658251542.geojson") # LAD boundaries
@@ -111,7 +111,7 @@ my_leaflet <- leaflet() %>%
 saveWidget(my_leaflet, file="output/leaflets/population_per_gp_fte_icb.html", selfcontained = FALSE)
 
 ###
-### Ward level leaflet
+### Ward level leaflets
 ###
 
 # Compute total qualified GP FTE per Local Authority District
@@ -132,7 +132,7 @@ qualified_gp <- data_ons %>%
   ungroup() %>%
   mutate(pop_per_gp = population / qualified_gp_fte) # get population per GP FTE in LAD 
 
-# List of wards to clip leaflet to
+# List of wards to crop leaflet to
 ward_codes <- qualified_gp %>%
   select(WD23CD)
 
@@ -173,9 +173,9 @@ my_leaflet <- leaflet() %>%
   addTiles() %>%
   setView(lat=52.47949, lng=-1.90119, zoom=6.5) %>%
   addRectangles(
-    lng1 = -180, lat1 = -90, # Cover the whole map with a rectangle
+    lng1 = -180, lat1 = -90, # Black background so Wards with no GPs show up as black
     lng2 = 180, lat2 = 90,
-    color = NULL, # No border
+    color = NULL, 
     fillColor = "black",
     fillOpacity = 1
   ) %>%
