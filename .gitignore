@@ -57,6 +57,7 @@ rsconnect/
 .quarto
 
 # Exclude the following directories 
+data/
 data/*
 output/
 
