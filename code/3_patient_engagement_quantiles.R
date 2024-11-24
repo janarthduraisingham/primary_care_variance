@@ -35,12 +35,13 @@ metrics <- raw_data %>%
          lastgpapptneeds,
          overallexp,
          gpcontactoverall) %>%
-  filter(icb_name %in% c("NHS North Central London Integrated Care Board", # Only look at NCL ICB
-#                         "NHS North West London Integrated Care Board",  #UNCOMMENT TO CONSIDER ALL LONDON ICBs
-#                         "NHS North East London Integrated Care Board",
-#                         "NHS South East London Integrated Care Board",
-#                         "NHS South West London Integrated Care Board"
+  filter(icb_name %in% c("NHS North Central London Integrated Care Board",
+                         "NHS North West London Integrated Care Board",  
+                         "NHS North East London Integrated Care Board",
+                         "NHS South East London Integrated Care Board",
+                         "NHS South West London Integrated Care Board"
   )) %>%
+  filter(icb_name == "NHS North Central London Integrated Care Board") %>% # COMMENT OUT TO LOOK AT ALL LONDON ICBS
   mutate(total_appointments = AttendanceOutcome_Attended + AttendanceOutcome_DNA + AttendanceOutcome_Unknown) %>% # Compute total number of appointments
   mutate(attended_prop = AttendanceOutcome_Attended / total_appointments, # express outcomes proportionally
          dna_prop = AttendanceOutcome_DNA / total_appointments,
