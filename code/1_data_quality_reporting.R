@@ -36,7 +36,7 @@ if (!(dir.exists("output"))) {
 }
 
 colnames(summary) <- c("proportion_missing", "min_of_column", "max_of_column")
-write.csv(missings, "output/data_quality_summary.csv")
+write.csv(summary, "output/data_quality_summary.csv")
 
 ### Variable frequency plots
 

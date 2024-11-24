@@ -63,7 +63,7 @@ ggsave("output/patient_engagement/unattended_appointment_proportion_histogram.pn
 
 # Get GP practices falling in extreme quantiles
 high_dna <- metrics %>%
-  filter(dna_prop >= QUANTILE(metrics$dna_prop, QUANTILE, na.rm=TRUE)) 
+  filter(dna_prop >= quantile(metrics$dna_prop, QUANTILE, na.rm=TRUE)) 
 
 ###
 ### Appointment needs met
@@ -81,7 +81,7 @@ ggsave("output/patient_engagement/needs_met_proportion_histogram.png", needsmet_
 
 # Get GP practices falling in extreme quantiles
 low_needsmet <- metrics %>%
-  filter(lastgpapptneeds <= QUANTILE(metrics$lastgpapptneeds, 1-QUANTILE, na.rm=TRUE))
+  filter(lastgpapptneeds <= quantile(metrics$lastgpapptneeds, 1-QUANTILE, na.rm=TRUE))
 
 ###
 ### Overall Experience
@@ -99,7 +99,7 @@ ggsave("output/patient_engagement/overall_experience_good_proportion_histogram.p
 
 # Get GP practices falling in extreme quantiles  
 low_overallexp <- metrics %>%
-  filter(overallexp <= QUANTILE(metrics$overallexp, 1-QUANTILE, na.rm=TRUE))
+  filter(overallexp <= quantile(metrics$overallexp, 1-QUANTILE, na.rm=TRUE))
 
 
 # Return list of GP Practices falling in extreme quantiles for all variables of interest
