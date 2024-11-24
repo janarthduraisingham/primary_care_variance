@@ -1,4 +1,4 @@
-# Purpose: this script aims to illustrate local access to GPs through leaflets
+# Purpose: this script outputs leaflet choropleths illustrating local access to GPs
 
 # Import libraries
 library(tidyverse)
