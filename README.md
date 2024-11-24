@@ -1,4 +1,4 @@
-# Variance in Primary Care Performance between London ICBS and within NCL ICB
+# Variance in Primary Care Performance between London ICBs and within NCL ICB
 
 This repository contains four R scripts comprising part of a tool to aid decision in making in allocating additional resource to GP Practices in North Central London Integrated Care Board (NCL ICB)
 
