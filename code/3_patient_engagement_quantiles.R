@@ -1,4 +1,6 @@
 # Purpose: this script generates plots illustrating the engagement of patients with GP Practices
+# and identifies GPs that consistently fall in extreme quantiles
+
 
 # Import libraries
 library(tidyverse)
@@ -6,8 +8,21 @@ library(tidyverse)
 # Import data
 raw_data <- read_csv("data/task_dataset.csv")
 
-# Set quantile variable for threshold
-quantile <- 0.9
+# Set QUANTILE variable for threshold
+QUANTILE <- 0.9
+
+# Create directory for plots
+if (!(dir.exists("output"))) {
+  
+  dir.create("output")
+  
+}
+
+if (!dir.exists("output/patient_engagement")) {
+  
+  dir.create("output/patient_engagement")
+  
+}
 
 # Compute proportion of appointments not attended per practice
 metrics <- raw_data %>%
@@ -20,11 +35,11 @@ metrics <- raw_data %>%
          lastgpapptneeds,
          overallexp,
          gpcontactoverall) %>%
-  filter(icb_name %in% c("NHS North Central London Integrated Care Board",
-                         "NHS North West London Integrated Care Board",
-                         "NHS North East London Integrated Care Board",
-                         "NHS South East London Integrated Care Board",
-                         "NHS South West London Integrated Care Board"
+  filter(icb_name %in% c("NHS North Central London Integrated Care Board", # Only look at NCL ICB
+#                         "NHS North West London Integrated Care Board",  #UNCOMMENT TO CONSIDER ALL LONDON ICBs
+#                         "NHS North East London Integrated Care Board",
+#                         "NHS South East London Integrated Care Board",
+#                         "NHS South West London Integrated Care Board"
   )) %>%
   mutate(total_appointments = AttendanceOutcome_Attended + AttendanceOutcome_DNA + AttendanceOutcome_Unknown) %>% # Compute total number of appointments
   mutate(attended_prop = AttendanceOutcome_Attended / total_appointments, # express outcomes proportionally
@@ -43,10 +58,11 @@ unattended_hist <- ggplot(metrics, aes(x=dna_prop)) +
   xlab("Proportion of appointments not attended") +
   ylab("Frequency")
 
-unattended_hist
+ggsave("output/patient_engagement/unattended_appointment_proportion_histogram.png", unattended_hist)
 
+# Get GP practices falling in extreme quantiles
 high_dna <- metrics %>%
-  filter(dna_prop >= quantile(metrics$dna_prop, quantile, na.rm=TRUE))
+  filter(dna_prop >= QUANTILE(metrics$dna_prop, QUANTILE, na.rm=TRUE)) 
 
 ###
 ### Appointment needs met
@@ -60,10 +76,11 @@ needsmet_hist <- ggplot(metrics, aes(x=lastgpapptneeds)) +
   xlab("Proportion of 'Needs Met' answered 'Yes' for last appointment") +
   ylab("Frequency")
 
-needsmet_hist
+ggsave("output/patient_engagement/needs_met_proportion_histogram.png", needsmet_hist)
 
+# Get GP practices falling in extreme quantiles
 low_needsmet <- metrics %>%
-  filter(lastgpapptneeds <= quantile(metrics$lastgpapptneeds, 1-quantile, na.rm=TRUE))
+  filter(lastgpapptneeds <= QUANTILE(metrics$lastgpapptneeds, 1-QUANTILE, na.rm=TRUE))
 
 ###
 ### Overall Experience
@@ -77,14 +94,16 @@ overallexp_hist <- ggplot(metrics, aes(x=overallexp)) +
   xlab("Proportion of 'Overall Experience' answered Good") +
   ylab("Frequency")
 
-overallexp_hist
-  
-low_overallexp <- metrics %>%
-  filter(overallexp <= quantile(metrics$overallexp, 1-quantile, na.rm=TRUE))
+ggsave("output/patient_engagement/overall_experience_good_proportion_histogram.png", overallexp_hist)
 
+# Get GP practices falling in extreme quantiles  
+low_overallexp <- metrics %>%
+  filter(overallexp <= QUANTILE(metrics$overallexp, 1-QUANTILE, na.rm=TRUE))
+
+
+# Return list of GP Practices falling in extreme quantiles for all variables of interest
 gps_to_support <- Reduce(intersect, list(high_dna$gp_code,
                        low_needsmet$gp_code,
                        low_overallexp$gp_code))
 
-gps_to_support
-length(gps_to_support)
+write.csv(gps_to_support, "gps_to_support_gp_codes")
