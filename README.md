@@ -64,4 +64,4 @@ Note: The scripts will automatically create the output folder and their respecti
 
 ## Acknowledgements
 - North Central London Integrated Care Board, for task_dataset.csv and task_metadata.csv
-- North Central London Integrated Care Board, for the README.md template this document is based on
+- North Central London Integrated Care Board, for the RAP repository template that this repository is based on
