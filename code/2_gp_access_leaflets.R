@@ -16,7 +16,6 @@ population_lookup <- read_excel("data/sapemsoaquinaryagetablefinal.xlsx", sheet 
 ward_lookup <- read_csv("data/Middle_Layer_Super_Output_Area_(2021)_to_Ward_to_LAD_(May_2023)_Lookup_in_England_and_Wales.csv") # MSOA to Ward lookup
 icb_population_lookup <- read_excel("data/sapehealthgeogstablefinal.xlsx", sheet = "Mid-2021 ICB 2023", skip = 3) # ICB level population lookup
 
-msoa_polygons <- st_read("data/Middle_layer_Super_Output_Areas_December_2021_Boundaries_EW_BFC_V7_303696399389513507.geojson") # MSOA boundaries
 lad_polygons <- st_read("data/Local_Authority_Districts_May_2024_Boundaries_UK_BFC_-6788913184658251542.geojson") # LAD boundaries
 icb_polygons <- st_read("data/Integrated_Care_Boards_April_2023_EN_BFC_-2681674902471387656.geojson") # ICB boundaries
 ward_polygons <- st_read("data/Wards_May_2024_Boundaries_UK_BFE_2105195262474198835.geojson") # Ward boundaries
