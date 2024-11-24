@@ -1,17 +1,15 @@
 # Variance in Primary Care Performance between London ICBS and within NCL ICB
 
-
-> Describe your project in 1-3 sentences.
-
 This repository contains four R scripts comprising part of a tool to aid decision in making in allocating additional resource to GP Practices in North Central London Integrated Care Board (NCL ICB)
 
 ## Description
 
-The scripts aim to illustrate variations in outcomes for people who use, or need to use, GP Practices in NCL ICB, in respect of three areas:
+The scripts aim to illustrate variations in outcomes for people who use, or need to use, GP Practices in NCL ICB.
+In line with the ICB's holistic, proactive approach to healthcare, this analysis is focussed on the following three areas:
 
-* Measures of local access to GPs
-* Measures of patient engagement with GPs
-* Measures of opportunity for improving operational data integrity within GPS
+* Variation in measures of local access to GPs
+* Variation in measures of patient engagement with GPs
+* Variation in measures of opportunity for improving operational data integrity within GPs
 
 ## Prerequisites
 
@@ -53,14 +51,16 @@ Packages (To check, run sessionInfo() in Console)
 
 4. In the code folder, run the following scripts:
 
-	* 1_data_quality_reporting.R (outputs a simple data quality report and variable frequency plots)
-	* 2_gp_access_leaflets.R (outputs leaflets illustrating local access to GPs)
-	* 3_patient_engagement_quantiles.R (identifies GP Practices repeatedly scoring low in patient engagement metrics)
-	* 4_data_integrity_opportunity.R (identifies GP Practices with large opportunity to improve operational data integrity)
+	* 1_data_quality_reporting.R
+		* Outputs a simple data quality report and variable frequency plots
+	* 2_gp_access_leaflets.R 
+		* Outputs leaflets illustrating local access to GPs
+	* 3_patient_engagement_quantiles.R 
+		* Identifies GP Practices repeatedly scoring low in patient engagement metrics
+	* 4_data_integrity_opportunity.R 
+		* Identifies GP Practices with large opportunity to improve operational data integrity
 
-_Note: The scripts will automatically create the output folder and respective subfolders
-
-unately the [ability to create a project from template](https://docs.gitlab.com/ee/user/project/working_with_projects.html#create-a-project-from-a-custom-template) is not available on the NHS England GitLab, so the process of using this template is rather manual.
+Note: The scripts will automatically create the output folder and their respective subfolders
 
 ## Acknowledgements
 - North Central London Integrated Care Board, for task_dataset.csv and task_metadata.csv
