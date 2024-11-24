@@ -1,4 +1,4 @@
-# Purpose: this script outputs choropleth leaflets for various metrics
+# Purpose: this script aims to illustrate local access to GPs through leaflets
 
 # Import libraries
 library(tidyverse)
