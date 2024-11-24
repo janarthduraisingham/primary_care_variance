@@ -60,7 +60,7 @@ plot_frequency_histogram_continuous <- function(colname) {
     ylab("Frequency") +
     theme_classic()
   
-  ggsave(paste0("output/frequency_plots/", colname, "_freq_hist.png"), plot, width=5, height=5)
+  ggsave(paste0("output/variable_frequency_plots/", colname, "_freq_hist.png"), plot, width=5, height=5)
   
 }
 
@@ -75,14 +75,14 @@ plot_frequency_histogram_discrete <- function(colname) {
     theme_classic() +
     theme(axis.text.x = element_text(angle = 90, hjust = 1))
   
-  ggsave(paste0("output/frequency_plots/", colname, "_freq_bar_chart.png"), plot, width=5, height=5)
+  ggsave(paste0("output/variable_frequency_plots/", colname, "_freq_bar_chart.png"), plot, width=5, height=5)
   
 }
 
 # Create folder for frequency plots
 if (!(dir.exists("output/frequency_plots"))) {
   
-  dir.create("output/frequency_plots")
+  dir.create("output/variable_frequency_plots")
   
 }
 
