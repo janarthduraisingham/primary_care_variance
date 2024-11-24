@@ -1,6 +1,6 @@
 # Purpose: This script creates an output folder and outputs:
-# 1.) a csv data quality summary of the missingness and extremes in the task dataset
-# 2.) frequency histograms for each variable
+# 1.) a csv data quality summary of the missingness and extreme values in the task dataset
+# 2.) frequency histograms/ bar charts for each variable
 
 # Import libraries
 library(tidyverse)
