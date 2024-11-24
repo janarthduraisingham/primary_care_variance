@@ -48,5 +48,7 @@ ggsave("output/data_integrity_opportunity/bad_missing_data_histogram.png", bad_d
 
 opportunities <- filter(bad_data, bad_datapoints >= 1000)$gp_code
 
-write.csv(opportunities, "output/data_integrity_opportunity/gps_with_data_integrity_opportunity.csv")
+write.table(opportunities, "output/data_integrity_opportunity/gps_with_data_integrity_opportunity.csv",
+            col.names = FALSE,
+            row.names = FALSE)
          
