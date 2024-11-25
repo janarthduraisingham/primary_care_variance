@@ -35,6 +35,13 @@ if (!(dir.exists("output/leaflets"))) {
   
 }
 
+# Compute Ward population
+ward_population_lookup <- population_lookup %>%
+  left_join(ward_lookup, by = c("MSOA 2021 Code" = "MSOA21CD")) %>%
+  group_by(WD23CD, WD23NM) %>%
+  summarise(total = sum(Total)) %>%
+  ungroup()
+
 # Join ONS geographies onto postcode level raw data
 data_ons <- raw_data %>%
   left_join(postcode_lookup,
@@ -113,7 +120,7 @@ saveWidget(my_leaflet, file="output/leaflets/population_per_gp_fte_icb.html", se
 ### Ward level leaflets
 ###
 
-# Compute total qualified GP FTE per Local Authority District
+# Compute total qualified GP FTE per Ward
 
 qualified_gp <- data_ons %>%
   filter(icb_name %in% c("NHS North Central London Integrated Care Board",
@@ -124,12 +131,11 @@ qualified_gp <- data_ons %>%
   )) %>%
   #filter(icb_name == "NHS North Central London Integrated Care Board") %>% # UNCOMMENT TO LOOK AT NCL ICB ONLY 
   left_join(ward_lookup, by = c("msoa21cd" = "MSOA21CD")) %>% # join wards
-  left_join(population_lookup, by = c("msoa21cd" = "MSOA 2021 Code")) %>% # join population data
   group_by(WD23CD) %>%
-  summarise(qualified_gp_fte = sum(qualified_gp, na.rm=TRUE), # total GP FTE in LAD
-            population = sum(Total, na.rm=TRUE)) %>% # total population in LAD
+  summarise(qualified_gp_fte = sum(qualified_gp, na.rm=TRUE)) %>% # total GP FTE in Ward
   ungroup() %>%
-  mutate(pop_per_gp = population / qualified_gp_fte) # get population per GP FTE in LAD 
+  left_join(ward_population_lookup, by = c("WD23CD" = "WD23CD")) %>%
+  mutate(pop_per_gp = total / qualified_gp_fte) # get population per GP FTE in Ward
 
 # List of wards to crop leaflet to
 ward_codes <- qualified_gp %>%
