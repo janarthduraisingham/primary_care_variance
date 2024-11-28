@@ -129,7 +129,7 @@ qualified_gp <- data_ons %>%
                          "NHS South East London Integrated Care Board",
                          "NHS South West London Integrated Care Board"
   )) %>%
-  #filter(icb_name == "NHS North Central London Integrated Care Board") %>% # UNCOMMENT TO LOOK AT NCL ICB ONLY 
+  filter(icb_name == "NHS North Central London Integrated Care Board") %>% # UNCOMMENT TO LOOK AT NCL ICB ONLY 
   left_join(ward_lookup, by = c("msoa21cd" = "MSOA21CD")) %>% # join wards
   group_by(WD23CD) %>%
   summarise(qualified_gp_fte = sum(qualified_gp, na.rm=TRUE)) %>% # total GP FTE in Ward

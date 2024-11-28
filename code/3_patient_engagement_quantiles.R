@@ -41,7 +41,7 @@ metrics <- raw_data %>%
                          "NHS South East London Integrated Care Board",
                          "NHS South West London Integrated Care Board"
   )) %>%
-  filter(icb_name == "NHS North Central London Integrated Care Board") %>% # COMMENT OUT TO LOOK AT ALL LONDON ICBS
+  #filter(icb_name == "NHS North Central London Integrated Care Board") %>% # COMMENT OUT TO LOOK AT ALL LONDON ICBS
   mutate(total_appointments = AttendanceOutcome_Attended + AttendanceOutcome_DNA + AttendanceOutcome_Unknown) %>% # Compute total number of appointments
   mutate(attended_prop = AttendanceOutcome_Attended / total_appointments, # express outcomes proportionally
          dna_prop = AttendanceOutcome_DNA / total_appointments,
@@ -110,3 +110,40 @@ gps_to_support <- Reduce(intersect, list(high_dna$gp_code,
 write.table(gps_to_support, "output/patient_engagement/gps_to_support_gp_codes.csv",
             col.names = FALSE,
             row.names=FALSE)
+
+# Get under/overindexing for NCL ICB GPs in all 3 extreme quantiles
+practices <- metrics %>%
+  group_by(icb_name) %>%
+  summarise(practices = n()) %>% # Count GP practices per ICB
+  ungroup()
+
+extreme_quantile_practices <- metrics %>%
+  filter(gp_code %in% gps_to_support) %>% # Get GPs from list to support
+  group_by(icb_name) %>%
+  summarise(extreme_quantile_practices = n()) %>% # Count multi extreme quantile practices per ICB
+  ungroup()
+
+# get indexes for multi extreme quantile practices
+indexes <- practices %>%
+  left_join(extreme_quantile_practices,
+            by = 'icb_name') %>%
+  mutate(practice_proportion = practices / sum(practices),
+         extreme_quantile_practice_proportion = extreme_quantile_practices / sum(extreme_quantile_practices))
+
+# Plot grouped bar to show under/overindexing
+index_plot_data <- indexes %>%
+  pivot_longer(cols = c("practice_proportion", "extreme_quantile_practice_proportion"),
+               names_to = "proportion_type",
+               values_to = "proportion")
+
+index_plot <- ggplot(index_plot_data, aes(x = icb_name, y = proportion, fill = proportion_type)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.75, hjust=0)) +
+  xlab("ICB") +
+  ylab("Proportion") +
+  ggtitle("Composition of GP practices and triple extreme quantile practices") +
+  guides(fill=guide_legend(title="Proportion Type")) +
+  scale_fill_discrete(labels = c("Extreme quantile practices", "All practices"))
+
+  
